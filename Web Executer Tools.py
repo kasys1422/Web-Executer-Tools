@@ -5,7 +5,7 @@ import json
 DEFAULT_PROPERTIES_VALUE = {
                                "launch_webserver":True,
                                "title":"Web Executer Tools",
-                               "url(non launch_webserver only)":"./index.html",
+                               "url":"./index.html",
                                "html":"",
                                "width":1280,
                                "height":720,
@@ -66,7 +66,7 @@ prop = Properties("./properties.json")
 # Setup webview
 window = webview.create_window(
     title=prop.get_value("title",DEFAULT_PROPERTIES_VALUE["title"]),
-    url=prop.get_value("url(non launch_webserver only)",DEFAULT_PROPERTIES_VALUE["url(non launch_webserver only)"]),
+    url=prop.get_value("url",DEFAULT_PROPERTIES_VALUE["url"]),
     html=prop.get_value("html",DEFAULT_PROPERTIES_VALUE["html"]),
     width=prop.get_value("width",DEFAULT_PROPERTIES_VALUE["width"]),
     height=prop.get_value("height",DEFAULT_PROPERTIES_VALUE["height"]),
