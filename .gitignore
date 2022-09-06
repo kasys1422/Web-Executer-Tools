@@ -348,3 +348,12 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+blob_storage/
+env/
+src/
+toybox/
+Web Executer Tools/
+properties.json
+Web Executer Tools.pyproj
+Web Executer Tools.sln
