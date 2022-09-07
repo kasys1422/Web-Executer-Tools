@@ -1,5 +1,7 @@
 import webview
 import json
+import threading
+from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 
 # Default setting param
 DEFAULT_PROPERTIES_VALUE = {
@@ -23,7 +25,8 @@ DEFAULT_PROPERTIES_VALUE = {
                                "background_color":"#FFF",
                                "text_select":True,
                                "debug":False,
-                               "cef_mode":False
+                               "cef_mode":False,
+                               "use_webserver_of_webview":True
                           }
 
 # Load properties
@@ -85,6 +88,20 @@ window = webview.create_window(
 )
 print("[Info] Open webview")
 
+class WET_HttpRequestHandler(SimpleHTTPRequestHandler):
+    def __init__(self, *args, directory=None, **kwargs):
+        print(prop.get_value("url",DEFAULT_PROPERTIES_VALUE["url"]))
+        super.__init__(*args, directory=prop.get_value("url",DEFAULT_PROPERTIES_VALUE["url"]), **kwargs)
+
+
+if prop.get_value("launch_webserver",False) == True and prop.get_value("use_webserver_of_webview",True) == False:
+    server = ThreadingHTTPServer(("localhost", 8000), SimpleHTTPRequestHandler)
+    server_thread = threading.Thread(target=server.serve_forever)
+    server_thread.daemon = True
+    server_thread.start()
+    prop.set_value("url","http://localhost:8000/")
+
+
 # Console message separater
 if prop.get_value("launch_webserver",False) == True:
     print("----------------------------------------------------------------------------")
@@ -94,7 +111,11 @@ if prop.get_value("cef_mode") != True:
     gui = None
 else:
     gui = "cef"
-webview.start(gui=gui,http_server=prop.get_value("launch_webserver",False) ,debug=prop.get_value("debug",DEFAULT_PROPERTIES_VALUE["debug"]))
+if prop.get_value("launch_webserver",False) == True and prop.get_value("use_webserver_of_webview",True) == True:
+    http_server = True
+else:
+    http_server = False
+webview.start(gui=gui,http_server=http_server ,debug=prop.get_value("debug",DEFAULT_PROPERTIES_VALUE["debug"]))
 
 # Console message separater
 if prop.get_value("launch_webserver",False) == True:

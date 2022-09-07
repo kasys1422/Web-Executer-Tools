@@ -353,7 +353,7 @@ blob_storage/
 env/
 src/
 toybox/
-Web Executer Tools/
+WebExecuterTools/
 properties.json
 Web Executer Tools.pyproj
 Web Executer Tools.sln
