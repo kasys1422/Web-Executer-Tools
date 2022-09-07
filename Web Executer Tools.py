@@ -66,6 +66,13 @@ class Properties:
 print('[Info] Load properties from "./properties.json"')
 prop = Properties("./properties.json")
 
+if prop.get_value("launch_webserver",False) == True and prop.get_value("use_webserver_of_webview",True) == False:
+    server = ThreadingHTTPServer(("localhost", 8000), SimpleHTTPRequestHandler)
+    server_thread = threading.Thread(target=server.serve_forever)
+    server_thread.daemon = True
+    server_thread.start()
+    prop.set_value("url","http://localhost:8000/")
+
 # Setup webview
 window = webview.create_window(
     title=prop.get_value("title",DEFAULT_PROPERTIES_VALUE["title"]),
@@ -87,20 +94,6 @@ window = webview.create_window(
     text_select=prop.get_value("text_select",DEFAULT_PROPERTIES_VALUE["text_select"]),
 )
 print("[Info] Open webview")
-
-class WET_HttpRequestHandler(SimpleHTTPRequestHandler):
-    def __init__(self, *args, directory=None, **kwargs):
-        print(prop.get_value("url",DEFAULT_PROPERTIES_VALUE["url"]))
-        super.__init__(*args, directory=prop.get_value("url",DEFAULT_PROPERTIES_VALUE["url"]), **kwargs)
-
-
-if prop.get_value("launch_webserver",False) == True and prop.get_value("use_webserver_of_webview",True) == False:
-    server = ThreadingHTTPServer(("localhost", 8000), SimpleHTTPRequestHandler)
-    server_thread = threading.Thread(target=server.serve_forever)
-    server_thread.daemon = True
-    server_thread.start()
-    prop.set_value("url","http://localhost:8000/")
-
 
 # Console message separater
 if prop.get_value("launch_webserver",False) == True:
